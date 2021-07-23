@@ -58,7 +58,7 @@ function createFeatures(earthquakeData) {
       return L.circleMarker(latlng);
     },
     style: function(feature){
-      console.log(feature.geometry.coordinates[2])
+      
       return{
         radius: circleSize(feature.properties.mag),
         fillColor: colorChoose(parseFloat(feature.geometry.coordinates[2])),
@@ -121,4 +121,28 @@ function createMap(earthquakes) {
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+
+  var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (myMap) {
+	
+    var div = L.DomUtil.create('div', 'info legend'),
+        quakes = [0, 20, 40, 60, 80, 100],
+        labels = [];
+
+    //use loop to create each line
+    for (var i = 0; i < quakes.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + colorChoose(quakes[i] + 1) + '"></i> ' +
+            quakes[i] + (quakes[i + 1] ? '&ndash;' + quakes[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(myMap);
 }
+
+
+
